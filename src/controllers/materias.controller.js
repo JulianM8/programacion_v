@@ -9,6 +9,17 @@ import {
 } from "../validators/materias.validator.js";
 
 
+/**
+ * Controlador para listar las materias del usuario autenticado, aplicando filtros y paginación.
+ *
+ * @async
+ * @function listMaterias
+ * @param {import('express').Request} request - Objeto de solicitud de Express. Se espera `request.query` con los filtros y `request.user.id` con el ID del usuario autenticado.
+ * @param {import('express').Response} response - Objeto de respuesta de Express.
+ * @param {import('express').NextFunction} next - Función para pasar el control al siguiente middleware en caso de error.
+ *
+ * @returns {Promise<void>} Envía una respuesta 200 con el listado de materias y los metadatos de paginación, o delega el error al middleware correspondiente.
+ */
 export async function listMaterias(request, response, next) {
     try {
         const filters = validateMateriaListQuery(request.query);
@@ -19,6 +30,19 @@ export async function listMaterias(request, response, next) {
     }
 }
 
+/**
+ * Controlador para obtener una materia específica del usuario autenticado a partir de su ID.
+ *
+ * @async
+ * @function getMaterias
+ * @param {import('express').Request} request - Objeto de solicitud de Express. Se espera `request.params.id` con el ID de la materia y `request.user.id` con el ID del usuario autenticado.
+ * @param {import('express').Response} response - Objeto de respuesta de Express.
+ * @param {import('express').NextFunction} next - Función para pasar el control al siguiente middleware en caso de error.
+ *
+ * @returns {Promise<void>} Envía una respuesta 200 con los datos de la materia, o delega el error al middleware correspondiente.
+ *
+ * @throws {HttpError} Código 404 (MATERIA_NOT_FOUND) si la materia no existe o no pertenece al usuario.
+ */
 export async function getMaterias(request, response, next) {
     try {
         const id = validateMateriaId(request.params.id);
@@ -28,6 +52,21 @@ export async function getMaterias(request, response, next) {
         return next(error);
     }
 }
+
+/**
+ * Controlador para crear una nueva materia asociada al usuario autenticado.
+ *
+ * @async
+ * @function createMateria
+ * @param {import('express').Request} request - Objeto de solicitud de Express. Se espera `request.body` con los datos de la materia y `request.user.id` con el ID del usuario autenticado.
+ * @param {import('express').Response} response - Objeto de respuesta de Express.
+ * @param {import('express').NextFunction} next - Función para pasar el control al siguiente middleware en caso de error.
+ *
+ * @returns {Promise<void>} Envía una respuesta 201 con la materia creada, o delega el error al middleware correspondiente.
+ *
+ * @throws {HttpError} Código 409 (DUPLICATE_CODE) si el código ya está registrado para el usuario.
+ * @throws {HttpError} Código 409 (DUPLICATE_NAME) si el nombre ya está registrado para el usuario.
+ */
 export async function createMateria(request, response, next) {
     try {
         const payload = validateCreateMateria(request.body);
@@ -37,6 +76,22 @@ export async function createMateria(request, response, next) {
         return next(error);
     }
 }
+
+/**
+ * Controlador para reemplazar por completo los datos de una materia existente del usuario autenticado.
+ *
+ * @async
+ * @function replaceMateria
+ * @param {import('express').Request} request - Objeto de solicitud de Express. Se espera `request.params.id` con el ID de la materia, `request.body` con los nuevos datos y `request.user.id` con el ID del usuario autenticado.
+ * @param {import('express').Response} response - Objeto de respuesta de Express.
+ * @param {import('express').NextFunction} next - Función para pasar el control al siguiente middleware en caso de error.
+ *
+ * @returns {Promise<void>} Envía una respuesta 200 con la materia actualizada, o delega el error al middleware correspondiente.
+ *
+ * @throws {HttpError} Código 404 (MATERIA_NOT_FOUND) si la materia no existe o no pertenece al usuario.
+ * @throws {HttpError} Código 409 (DUPLICATE_CODE) si el código ya está registrado para el usuario.
+ * @throws {HttpError} Código 409 (DUPLICATE_NAME) si el nombre ya está registrado para el usuario.
+ */
 export async function replaceMateria(request, response, next) {
     try {
         const id = validateMateriaId(request.params.id);
@@ -48,6 +103,21 @@ export async function replaceMateria(request, response, next) {
     }
 }
 
+/**
+ * Controlador para actualizar parcialmente los datos de una materia existente del usuario autenticado.
+ *
+ * @async
+ * @function updateMateria
+ * @param {import('express').Request} request - Objeto de solicitud de Express. Se espera `request.params.id` con el ID de la materia, `request.body` con los datos parciales y `request.user.id` con el ID del usuario autenticado.
+ * @param {import('express').Response} response - Objeto de respuesta de Express.
+ * @param {import('express').NextFunction} next - Función para pasar el control al siguiente middleware en caso de error.
+ *
+ * @returns {Promise<void>} Envía una respuesta 200 con la materia actualizada, o delega el error al middleware correspondiente.
+ *
+ * @throws {HttpError} Código 404 (MATERIA_NOT_FOUND) si la materia no existe o no pertenece al usuario (propagado por el servicio).
+ * @throws {HttpError} Código 409 (DUPLICATE_CODE) si el código ya está registrado para el usuario (propagado por el servicio).
+ * @throws {HttpError} Código 409 (DUPLICATE_NAME) si el nombre ya está registrado para el usuario (propagado por el servicio).
+ */
 export async function updateMateria(request, response, next) {
     try {
         const id = validateMateriaId(request.params.id);
@@ -59,6 +129,19 @@ export async function updateMateria(request, response, next) {
     }
 }
 
+/**
+ * Controlador para eliminar una materia existente del usuario autenticado.
+ *
+ * @async
+ * @function deleteMateria
+ * @param {import('express').Request} request - Objeto de solicitud de Express. Se espera `request.params.id` con el ID de la materia y `request.user.id` con el ID del usuario autenticado.
+ * @param {import('express').Response} response - Objeto de respuesta de Express.
+ * @param {import('express').NextFunction} next - Función para pasar el control al siguiente middleware en caso de error.
+ *
+ * @returns {Promise<void>} Envía una respuesta 204 sin contenido si la eliminación fue exitosa, o delega el error al middleware correspondiente.
+ *
+ * @throws {HttpError} Código 404 (MATERIA_NOT_FOUND) si la materia no existe o no pertenece al usuario.
+ */
 export async function deleteMateria(request, response, next) {
     try {
         const id = validateMateriaId(request.params.id);
