@@ -29,5 +29,4 @@ app.use(notFoundHandler);
 // Maneja los errores de la aplicación
 app.use(errorHandler);
 
-// Exporta la aplicación para usarla en otro archivo
 export default app;

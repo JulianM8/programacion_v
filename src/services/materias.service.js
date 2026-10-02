@@ -169,6 +169,19 @@ export async function removeMateria(id, userId) {
   await getMateriaById(id, userId);
   await materiasRepository.deleteMateria(id, userId);
 }
-
+/**
+ * Obtiene el listado de eventos asociados a una materia específica, validando que la materia pertenezca al usuario.
+ * @async
+ * @function listEventosByMateria
+ * @param {string|number} id - Identificador único de la materia.
+ * @param {string|number} userId - Identificador único del usuario dueño de la materia.
+ *
+ * @returns {Promise<Array>} El listado de eventos asociados a la materia.
+ *
+ * @throws {HttpError} Código 404 (MATERIA_NOT_FOUND) si la materia no existe o no pertenece al usuario.
+ */
+export async function listEventosByMateria(id, userId) {
+  return materiasRepository.findEventosByMateriaAndUserId(id, userId);
+}
 
 

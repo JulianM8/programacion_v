@@ -326,6 +326,29 @@ export async function deleteMateria(id, userId) {
   return result.affectedRows > 0;
 }
 
+export async function findEventosByMateriaAndUserId(id, userId) {
+  const [rows] = await pool.execute(
+    `SELECT
+       e.id_evento AS id,
+       e.id_materia AS materiaId,
+       e.titulo,
+       e.descripcion,
+       DATE_FORMAT(e.fecha, '%Y-%m-%d') AS fecha,
+       DATE_FORMAT(e.hora_inicio, '%H:%i') AS horaInicio,
+       DATE_FORMAT(e.hora_fin, '%H:%i') AS horaFin,
+       e.tipo,
+       DATE_FORMAT(e.created_at, '%Y-%m-%d %H:%i:%s') AS createdAt,
+       DATE_FORMAT(e.updated_at, '%Y-%m-%d %H:%i:%s') AS updatedAt
+     FROM evento e
+     INNER JOIN materia m ON m.id_materia = e.id_materia
+     WHERE m.id_materia = ? AND m.id_usuario = ?`,
+    [id, userId]
+  );
+
+  return rows;
+}
+
+
 
 
 

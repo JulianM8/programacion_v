@@ -151,3 +151,26 @@ export async function deleteMateria(request, response, next) {
         return next(error);
     }
 }
+/**
+ * Controlador para listar los eventos asociados a una materia específica del usuario autenticado.
+ * @async
+ * @function listEventosByMateria
+ * @param {import('express').Request} request - Objeto de solicitud de Express. Se espera `request.params.id` con el ID de la materia y `request.user.id` con el ID del usuario autenticado.
+ * @param {import('express').Response} response - Objeto de respuesta de Express.
+ * @param {import('express').NextFunction} next - Función para pasar el control al siguiente middleware en caso de error.
+ * @returns {Promise<void>} Envía una respuesta 200 con el listado de eventos asociados a la materia, o delega el error al middleware correspondiente.
+ * @throws {HttpError} Código 404 (MATERIA_NOT_FOUND) si la materia no existe o no pertenece al usuario.
+ */
+export async function listEventosByMateria(request, response, next) {
+  try {
+    const id = validateMateriaId(request.params.id);
+    const eventos = await materiasService.listEventosByMateria(
+      id,
+      request.user.id
+    );
+
+    return sendSuccess(response, eventos);
+  } catch (error) {
+    return next(error);
+  }
+}
