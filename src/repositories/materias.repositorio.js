@@ -326,6 +326,56 @@ export async function deleteMateria(id, userId) {
   return result.affectedRows > 0;
 }
 
+/**
+ * Obtiene todas las tareas asociadas a una materia específica, validando que la materia
+ * pertenezca al usuario indicado.
+ *
+ * @async
+ * @function findTareasByMateriaAndUserId
+ * @param {string|number} id - Identificador único de la materia.
+ * @param {string|number} userId - Identificador único del usuario dueño de la materia.
+ *
+ * @returns {Promise<Array>} El listado de tareas asociadas a la materia.
+ *
+ * @throws {HttpError} Código 404 (MATERIA_NOT_FOUND) si la materia no existe o no pertenece al usuario.
+ */
+export async function findTareasByMateriaAndUserId(id, userId) {
+  const [rows] = await pool.execute(
+    `SELECT
+       t.id_tarea AS id,
+       t.id_materia AS materiaId,
+       t.titulo,
+       t.descripcion,
+       DATE_FORMAT(t.fecha_entrega, '%Y-%m-%d') AS fechaEntrega,
+       DATE_FORMAT(t.hora_entrega, '%H:%i') AS horaEntrega,
+       t.prioridad,
+       t.estado,
+       t.carga_estimada_minutos AS cargaEstimadaMinutos,
+       t.porcentaje_avance AS porcentajeAvance,
+       DATE_FORMAT(t.created_at, '%Y-%m-%d %H:%i:%s') AS createdAt,
+       DATE_FORMAT(t.updated_at, '%Y-%m-%d %H:%i:%s') AS updatedAt
+     FROM tarea t
+     INNER JOIN materia m ON m.id_materia = t.id_materia
+     WHERE m.id_materia = ? AND m.id_usuario = ?`,
+    [id, userId]
+  );
+
+  return rows;
+}
+
+/**
+ * Obtiene todas los eventos asociados a una materia específica, validando que la materia
+ * pertenezca al usuario indicado.
+ *
+ * @async
+ * @function findEventosByMateriaAndUserId
+ * @param {string|number} id - Identificador único de la materia.
+ * @param {string|number} userId - Identificador único del usuario dueño de la materia.
+ *
+ * @returns {Promise<Array>} El listado de eventos asociados a la materia.
+ *
+ * @throws {HttpError} Código 404 (MATERIA_NOT_FOUND) si la materia no existe o no pertenece al usuario.
+ */
 export async function findEventosByMateriaAndUserId(id, userId) {
   const [rows] = await pool.execute(
     `SELECT
