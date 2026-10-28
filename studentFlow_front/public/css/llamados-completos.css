@@ -11,9 +11,10 @@ input[type="color"] { height: 48px; padding: 4px; }
 .tabla-contenedor { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; text-align: left; }
 caption { text-align: left; padding: 16px 0; color: #53657d; }
-th, td { padding: 14px 12px; border-bottom: 1px solid #dce3ee; }
 th { background: #eaf0f8; font-size: .9rem; }
-td { overflow-wrap: anywhere; }
+th, td { padding: 16px 20px; border-bottom: 1px solid #dce3ee; }
+td { overflow-wrap: break-word; }
+td:nth-child(3), td:nth-child(4), td:nth-child(5) { white-space: nowrap; }
 tbody tr:hover { background: #f2f5fa; }
 .detalle-estado dt { font-weight: 600; margin-top: 16px; }
 .detalle-estado dd { margin: 4px 0 0; }

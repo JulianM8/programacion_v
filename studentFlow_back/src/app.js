@@ -1,6 +1,7 @@
 import express from "express";
 import healthRouter from "./routes/health.routes.js";
 import materiasRouter from "./routes/materias.routes.js";
+import recordatoriosRouter from "./routes/recordatorios.routes.js";
 import { errorHandler, notFoundHandler } from "./middlewares/error.middleware.js";
 import { attachTemporaryUser } from "./middlewares/request-context.middleware.js";
 
@@ -18,6 +19,9 @@ app.use("/api/v1/health", healthRouter);
 
 // Usa las rutas de materias en /api/v1/materias
 app.use("/api/v1/materias", materiasRouter);
+
+// Usa las rutas de recordatorios en /api/v1/recordatorios
+app.use("/api/v1/recordatorios", recordatoriosRouter);
 
 // Maneja las rutas que no existen
 app.use(notFoundHandler);
